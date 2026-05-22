@@ -57,7 +57,7 @@ int main(void) {
         Clay_BeginLayout();
 
         CLAY(
-            CLAY_ID("test"), {
+            CLAY_ID("root"), {
             .layout = {
                 .padding = CLAY_PADDING_ALL(16),
                 .sizing = {
@@ -69,11 +69,19 @@ int main(void) {
                 .imageData = &wsBackground
             }
         }) {
+            // Nine Circle logo
+            // (optional) help + stats button
+            // search + floating autocomplete
+            // for loop over each guess object
             CLAY_AUTO_ID({
                 .layout = {
                     .sizing = {
                         .width = CLAY_SIZING_GROW(),
                         .height = CLAY_SIZING_GROW()
+                    },
+                    .childAlignment = {
+                        .x = CLAY_ALIGN_X_CENTER,
+                        .y = CLAY_ALIGN_Y_CENTER
                     }
                 }
             }) {
