@@ -6,6 +6,8 @@
 #include "../lib/clay/clay.h"
 #include "../lib/clay/renderers/raylib/clay_renderer_raylib.c"
 
+#define ASSET(path) "./assets/" path
+
 void HandleClayErrors(Clay_ErrorData errorData) {
     printf("%s", errorData.errorText.chars);
 }
@@ -13,20 +15,26 @@ void HandleClayErrors(Clay_ErrorData errorData) {
 int main(void) {
     uint64_t totalMemorySize = Clay_MinMemorySize();
     Clay_Arena arena = Clay_CreateArenaWithCapacityAndMemory(totalMemorySize, malloc(totalMemorySize));
-    Clay_Initialize(arena, (Clay_Dimensions){.width = 1280, .height = 720}, (Clay_ErrorHandler) { HandleClayErrors });
-
+    Clay_Initialize(
+        arena, 
+        (Clay_Dimensions) {
+            .width = 1280, 
+            .height = 720
+        }, 
+        (Clay_ErrorHandler) { HandleClayErrors }
+    );
+    
     Clay_Raylib_Initialize(
         1280, 720,
         "Nine Circ-le",
         FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_HIGHDPI | FLAG_VSYNC_HINT
     );
     
-    Font fonts[0];
-    const Texture wsBackground = LoadTexture("./assets/widescreen_background.png");
-    const Clay_Dimensions wsBackgroundDimensions = {
-        .width = 2257,
-        .height = 1280
+    Font fonts[] = {
+        LoadFont(ASSET("PUSAB.otf"))
     };
+    Clay_SetMeasureTextFunction(Raylib_MeasureText, fonts);
+    const Texture wsBackground = LoadTexture(ASSET("widescreen_background.png"));
     
     while (!WindowShouldClose()) {
         Clay_SetLayoutDimensions((Clay_Dimensions){
@@ -61,7 +69,22 @@ int main(void) {
                 .imageData = &wsBackground
             }
         }) {
-
+            CLAY_AUTO_ID({
+                .layout = {
+                    .sizing = {
+                        .width = CLAY_SIZING_GROW(),
+                        .height = CLAY_SIZING_GROW()
+                    }
+                }
+            }) {
+                CLAY_TEXT(
+                    CLAY_STRING("text test"), {
+                        .fontId = 0,
+                        .fontSize = 72,
+                        .textColor = {255, 255, 255, 255}
+                    }
+                );
+            }
         }
 
         Clay_RenderCommandArray renderCommands = Clay_EndLayout(0);
