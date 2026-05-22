@@ -30,11 +30,17 @@ int main(void) {
         FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_HIGHDPI | FLAG_VSYNC_HINT
     );
     
+    typedef enum FontEnum {
+        PUSAB,
+        MAX    // Not a font, but used to iterate over fonts.
+    } FontEnum;
     Font fonts[] = {
         LoadFont(ASSET("PUSAB.otf"))
     };
     Clay_SetMeasureTextFunction(Raylib_MeasureText, fonts);
+    
     const Texture wsBackground = LoadTexture(ASSET("widescreen_background.png"));
+    const Texture nineCircleLogo = LoadTexture(ASSET("logo.png"));
     
     while (!WindowShouldClose()) {
         Clay_SetLayoutDimensions((Clay_Dimensions){
@@ -54,22 +60,50 @@ int main(void) {
             }, 
             0
         );
+        Clay_SetDebugModeEnabled(true);
         Clay_BeginLayout();
 
         CLAY(
             CLAY_ID("root"), {
             .layout = {
-                .padding = CLAY_PADDING_ALL(16),
                 .sizing = {
                     .width = CLAY_SIZING_GROW(),
                     .height = CLAY_SIZING_GROW()
-                }
+                },
+                .layoutDirection = CLAY_TOP_TO_BOTTOM
             },
             .image = {
                 .imageData = &wsBackground
             }
         }) {
             // Nine Circle logo
+            CLAY(CLAY_ID("logo box"), {
+                .layout = {
+                    .sizing = {
+                        .width = CLAY_SIZING_GROW(),
+                        .height = CLAY_SIZING_FIT()
+                    },
+                    .childAlignment = {
+                        .x = CLAY_ALIGN_X_CENTER,
+                        .y = CLAY_ALIGN_Y_TOP
+                    },
+                    .padding = {
+                        .top = 16
+                    }
+                },
+            }) {
+                CLAY(CLAY_ID("logo"), {
+                    .layout = {
+                        .sizing = {
+                            .width = CLAY_SIZING_FIXED(560),
+                            .height = CLAY_SIZING_FIXED(85)
+                        }
+                    },
+                    .image = {
+                        .imageData = &nineCircleLogo
+                    }
+                }) {}
+            }
             // (optional) help + stats button
             // search + floating autocomplete
             // for loop over each guess object
