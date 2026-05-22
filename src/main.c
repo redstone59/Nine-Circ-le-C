@@ -7,7 +7,6 @@
 #include "../lib/clay/renderers/raylib/clay_renderer_raylib.c"
 
 void HandleClayErrors(Clay_ErrorData errorData) {
-    // See the Clay_ErrorData struct for more information
     printf("%s", errorData.errorText.chars);
 }
 
@@ -16,29 +15,54 @@ int main(void) {
     Clay_Arena arena = Clay_CreateArenaWithCapacityAndMemory(totalMemorySize, malloc(totalMemorySize));
     Clay_Initialize(arena, (Clay_Dimensions){.width = 1280, .height = 720}, (Clay_ErrorHandler) { HandleClayErrors });
 
-    Clay_Raylib_Initialize(1280, 720, "Nine Circ-le", FLAG_WINDOW_RESIZABLE);
+    Clay_Raylib_Initialize(
+        1280, 720,
+        "Nine Circ-le",
+        FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_HIGHDPI | FLAG_VSYNC_HINT
+    );
     
     Font fonts[0];
+    const Texture wsBackground = LoadTexture("./assets/widescreen_background.png");
+    const Clay_Dimensions wsBackgroundDimensions = {
+        .width = 2257,
+        .height = 1280
+    };
     
     while (!WindowShouldClose()) {
         Clay_SetLayoutDimensions((Clay_Dimensions){
             .width = GetScreenWidth(),
             .height = GetScreenHeight()
         });
-
+        Clay_SetPointerState((Clay_Vector2) {
+            .x = GetMouseX(),
+            .y = GetMouseY()
+        }, IsMouseButtonDown(0));
+        Vector2 scrollVector = GetMouseWheelMoveV();
+        Clay_UpdateScrollContainers(
+            true,
+            (Clay_Vector2) { 
+                .x = scrollVector.x, 
+                .y = scrollVector.y
+            }, 
+            0
+        );
         Clay_BeginLayout();
 
         CLAY(
             CLAY_ID("test"), {
-            .backgroundColor = {255, 0, 0, 255},
             .layout = {
                 .padding = CLAY_PADDING_ALL(16),
                 .sizing = {
                     .width = CLAY_SIZING_GROW(),
                     .height = CLAY_SIZING_GROW()
                 }
+            },
+            .image = {
+                .imageData = &wsBackground
             }
-        }) {}
+        }) {
+
+        }
 
         Clay_RenderCommandArray renderCommands = Clay_EndLayout(0);
 
