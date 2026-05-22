@@ -18,4 +18,10 @@ todo
 
 # Building from source
 
+## For raylib
+
+Run `make`. The compiled executable will be placed in `/bin/nine-circle`.
+
+## For WebAssembly
+
 todo
