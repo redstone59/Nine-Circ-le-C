@@ -41,7 +41,11 @@ int main(void) {
     
     const Texture wsBackground = LoadTexture(ASSET("widescreen_background.png"));
     const Texture nineCircleLogo = LoadTexture(ASSET("logo.png"));
-    
+
+#ifdef NINE_CIRCLE_DEBUG
+    Clay_SetDebugModeEnabled(true);
+#endif
+
     while (!WindowShouldClose()) {
         Clay_SetLayoutDimensions((Clay_Dimensions){
             .width = GetScreenWidth(),
@@ -60,7 +64,6 @@ int main(void) {
             }, 
             0
         );
-        Clay_SetDebugModeEnabled(true);
         Clay_BeginLayout();
 
         CLAY(
