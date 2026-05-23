@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../lib/clay/clay.h"
+#include "../../lib/clay/clay.h"
 
 typedef enum Colour {
     NC_COLOR_RED,
