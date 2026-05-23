@@ -23,6 +23,11 @@ typedef struct Level {
     Clay_String verifier;
 } Level;
 
+typedef struct LevelArray {
+    Level* elements;
+    size_t count;
+} LevelArray;
+
 typedef enum Colour {
     NC_COLOR_RED,
     NC_COLOR_PINK,
