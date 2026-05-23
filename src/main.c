@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "randomised_levels.c"
+
 #define CLAY_IMPLEMENTATION
 #include "../lib/clay/clay.h"
 #include "../lib/clay/renderers/raylib/clay_renderer_raylib.c"
@@ -13,6 +15,9 @@ void HandleClayErrors(Clay_ErrorData errorData) {
 }
 
 int main(void) {
+    printf("--\nindex today: %zu\n--\n", GetRandomIndex(197));
+    return 0;
+
     uint64_t totalMemorySize = Clay_MinMemorySize();
     Clay_Arena arena = Clay_CreateArenaWithCapacityAndMemory(totalMemorySize, malloc(totalMemorySize));
     Clay_Initialize(

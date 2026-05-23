@@ -23,16 +23,19 @@ size_t RemainingIndicies_Pop(RemainingIndicies* indicies, size_t index) {
         indicies->elements[i] = indicies->elements[i + 1];
     }
     indicies->count--;
+    return value;
 }
 
 uint16_t DaysSinceNewYear() {
-    struct tm* currentTime = localtime(time(NULL));
+    time_t currentEpoch = time(NULL);
+    struct tm* currentTime = localtime(&currentEpoch);
 
     return currentTime->tm_yday;
 }
 
-size_t* GetRandomIndex(size_t count, size_t index) {
-    struct tm* currentTime = localtime(time(NULL));
+size_t GetRandomIndex(size_t count) {
+    time_t currentEpoch = time(NULL);
+    struct tm* currentTime = localtime(&currentEpoch);
     uint32_t seed = currentTime->tm_year;
     if (currentTime->tm_mon >= 5) {
         seed += 10000;
@@ -50,15 +53,12 @@ size_t* GetRandomIndex(size_t count, size_t index) {
     RemainingIndicies_Initialise(&remaining);
     
     size_t indicies[count];
+    int index = currentTime->tm_yday % 183;
     int currentIndex = 0;
     int i;
     while (remaining.count > 0) {
         i = SeedableRNG_Next(&rng) % remaining.count;
         indicies[currentIndex] = RemainingIndicies_Pop(&remaining, i);
-        
-        if (currentIndex == index) {
-            break;
-        }
         currentIndex++;
     }
 
@@ -66,7 +66,6 @@ size_t* GetRandomIndex(size_t count, size_t index) {
 }
 
 Level GetTodaysLevel(LevelArray* levels) {
-    LevelArray_Shuffle(levels);
-    size_t currentIndex = GetRandomIndex(levels->count, DaysSinceNewYear() % 183);
+    size_t currentIndex = GetRandomIndex(levels->count);
     return levels->elements[currentIndex];
 }
