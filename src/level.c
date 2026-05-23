@@ -1,33 +1,5 @@
 #include "../lib/clay/clay.h"
 
-typedef struct Level {
-    // API Information
-
-    Clay_String name;
-    Clay_String description;
-    Difficulty difficulty;
-    uint8_t stars;
-    Length length;
-    uint64_t downloads;
-    uint64_t likes;
-    uint64_t objectCount;
-    Rating rating;
-
-    // Non-API information (from wiki)
-
-    Colour primaryColour;
-    Colour secondaryColour;
-
-    Clay_String* creators;
-    size_t creatorCount;
-    Clay_String verifier;
-} Level;
-
-typedef struct LevelArray {
-    Level* elements;
-    size_t count;
-} LevelArray;
-
 typedef enum Colour {
     NC_COLOR_RED,
     NC_COLOR_PINK,
@@ -78,3 +50,31 @@ typedef enum Rating {
     NC_RATING_LEGENDARY,
     NC_RATING_MYTHIC
 } Rating;
+
+typedef struct Level {
+    // API Information
+
+    Clay_String name;
+    Clay_String description;
+    Difficulty difficulty;
+    uint8_t stars;
+    Length length;
+    uint64_t downloads;
+    uint64_t likes;
+    uint64_t objectCount;
+    Rating rating;
+
+    // Non-API information (from wiki)
+
+    Colour primaryColour;
+    Colour secondaryColour;
+
+    Clay_String* creators;
+    size_t creatorCount;
+    Clay_String verifier;
+} Level;
+
+typedef struct LevelArray {
+    Level* elements;
+    size_t count;
+} LevelArray;
