@@ -23,6 +23,7 @@ typedef struct NineCircleAppImages {
 typedef struct NineCircleAppData {
     Font* fonts;
     Clay_Arena arena;
+    GuessArray guesses;
 
     NineCircleAppImages images;
 } NineCircleAppData;
@@ -43,7 +44,7 @@ void NineCircleAppData_Initialise(NineCircleAppData* data, Font* fonts, Clay_Are
     NineCircleAppImages_Initialise(&data->images);
 }
 
-Clay_RenderCommandArray NineCircleApp_GetRenderCommands(NineCircleAppData* data) {
+Clay_RenderCommandArray NineCircleApp_GetRenderCommands(NineCircleAppData* data, float deltaTime) {
     Clay_BeginLayout();
 
     CLAY(
@@ -131,11 +132,11 @@ Clay_RenderCommandArray NineCircleApp_GetRenderCommands(NineCircleAppData* data)
                     .secondaryColourCorrect = true
                 };
 
-                for (int i = 0; i < 3; i++) {
-                    RenderGuessResult(&nineCirclesLevel, &testResult);
+                for (int i = 0; i < data->guesses.count; i++) {
+                    RenderGuessResult(&data->guesses.elements[i]);
                 }
             }
     }}
 
-    return Clay_EndLayout(0);
+    return Clay_EndLayout(deltaTime);
 }

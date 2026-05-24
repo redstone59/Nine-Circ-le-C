@@ -5,7 +5,7 @@
 
 #include "../string_builder.c"
 
-Texture2D GetLevelThumbnail(uint64_t id) {
+Texture GetLevelThumbnail(uint64_t id) {
     StringBuilder urlBuilder = {0};
     StringBuilder_Initialise(&urlBuilder, 64);
 
@@ -18,7 +18,7 @@ Texture2D GetLevelThumbnail(uint64_t id) {
     StringBuilder_Append(&urlBuilder, idString, strlen(idString));
 
     StringBuilder_Terminate(&urlBuilder);
-    Texture2D thumbnail = LoadTexture(urlBuilder.chars);
+    Texture thumbnail = LoadTexture("./assets/no thumbnail.png");
     StringBuilder_Free(&urlBuilder);
 
     return thumbnail;

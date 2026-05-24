@@ -12,7 +12,7 @@ typedef struct StringBuilder {
 
 void StringBuilder__Resize(StringBuilder* sb) {
     size_t newCapacity = sb->capacity << 1;
-    realloc(sb->chars, newCapacity);
+    sb->chars = realloc(sb->chars, newCapacity);
     sb->capacity = newCapacity;
 }
 

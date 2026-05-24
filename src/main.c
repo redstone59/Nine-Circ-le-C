@@ -35,6 +35,32 @@ int main(void) {
     NineCircleAppData appData = {0};
     NineCircleAppData_Initialise(&appData, fonts, arena);
 
+    Clay_String creators[] = { CLAY_STRING("Zobros") }; 
+    Level nineCirclesLevel = {
+        .id = 4284013,
+        .name = CLAY_STRING("Nine Circles"),
+        .creators = creators,
+        .creatorCount = 1
+    };
+    GuessResult testResult = {
+        .difficulty = RELATIVE_HIGHER,
+        .downloads = RELATIVE_LOWER,
+        .length = RELATIVE_CORRECT,
+        .likes = RELATIVE_HIGHER,
+        .objectCount = RELATIVE_LOWER,
+        .primaryColourCorrect = true,
+        .secondaryColourCorrect = false
+    };
+
+    GuessResultView testView = {0};
+    GuessResultView_Initialise(&testView, nineCirclesLevel, testResult);
+
+    GuessArray testArray = {0};
+    GuessArray_Initialise(&testArray, 16);
+    GuessArray_Append(&testArray, testView);
+    GuessArray_Append(&testArray, testView);
+    GuessArray_Append(&testArray, testView);
+
 #ifdef NINE_CIRCLE_DEBUG
     bool debugViewEnabled = true;
 #endif
@@ -64,7 +90,7 @@ int main(void) {
             Clay_SetDebugModeEnabled(debugViewEnabled);
 #endif
         
-        Clay_RenderCommandArray renderCommands = NineCircleApp_GetRenderCommands(&appData);
+        Clay_RenderCommandArray renderCommands = NineCircleApp_GetRenderCommands(&appData, 0);
 
         BeginDrawing();
         ClearBackground(MAGENTA);
