@@ -1,6 +1,8 @@
 #include "../../lib/clay/clay.h"
 #include "../../lib/clay/renderers/raylib/clay_renderer_raylib.c"
 
+#include "guess_view.c"
+
 #define ASSET(path) "./assets/" path
 
 typedef enum Fonts {
@@ -53,8 +55,9 @@ Clay_RenderCommandArray NineCircleApp_GetRenderCommands(NineCircleAppData* data)
             },
             .layoutDirection = CLAY_TOP_TO_BOTTOM
         },
+        .aspectRatio = 2257.0 / 1280.0,
         .image = {
-            .imageData = &(data->images.backgroundWidescreen)
+            .imageData = &data->images.backgroundWidescreen
         }
     }) {
         // Nine Circle logo
@@ -71,7 +74,7 @@ Clay_RenderCommandArray NineCircleApp_GetRenderCommands(NineCircleAppData* data)
                 .padding = {
                     .top = 16
                 }
-            },
+            }
         }) {
             CLAY(CLAY_ID("logo"), {
                 .layout = {
@@ -81,7 +84,7 @@ Clay_RenderCommandArray NineCircleApp_GetRenderCommands(NineCircleAppData* data)
                     }
                 },
                 .image = {
-                    .imageData = &(data->images.nineCircleLogo)
+                    .imageData = &data->images.nineCircleLogo
                 }
             }) {}
         }
@@ -96,19 +99,43 @@ Clay_RenderCommandArray NineCircleApp_GetRenderCommands(NineCircleAppData* data)
                 },
                 .childAlignment = {
                     .x = CLAY_ALIGN_X_CENTER,
-                    .y = CLAY_ALIGN_Y_CENTER
+                    .y = CLAY_ALIGN_Y_BOTTOM
                 }
             }
         }) {
-            CLAY_TEXT(
-                CLAY_STRING("text test"), {
-                    .fontId = 0,
-                    .fontSize = 72,
-                    .textColor = {255, 255, 255, 255}
+            CLAY(CLAY_ID("guess results view"), {
+                .layout = {
+                    .sizing = {
+                        .width = CLAY_SIZING_PERCENT(0.5),
+                        .height = CLAY_SIZING_GROW()
+                    },
+                    .childAlignment = {
+                        .x = CLAY_ALIGN_X_CENTER,
+                        .y = CLAY_ALIGN_Y_CENTER
+                    },
+                    .layoutDirection = CLAY_TOP_TO_BOTTOM,
+                    .childGap = 8
                 }
-            );
-        }
-    }
+            }) {
+                Level nineCirclesLevel = {
+                    .id = 4284013, 
+                    .name = CLAY_STRING("Nine Circles"),
+                };
+                GuessResult testResult = {
+                    .difficulty = RELATIVE_HIGHER,
+                    .downloads = RELATIVE_LOWER,
+                    .length = RELATIVE_CORRECT,
+                    .likes = RELATIVE_HIGHER,
+                    .objectCount = RELATIVE_CORRECT,
+                    .primaryColourCorrect = true,
+                    .secondaryColourCorrect = true
+                };
+
+                for (int i = 0; i < 3; i++) {
+                    RenderGuessResult(&nineCirclesLevel, &testResult);
+                }
+            }
+    }}
 
     return Clay_EndLayout(0);
 }
