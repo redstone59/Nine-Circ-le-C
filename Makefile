@@ -11,7 +11,7 @@ build: ${FILES}
 	@mv ${EXECUTABLE_NAME} ./bin
 
 debug: ${FILES}
-	@${CC} -o ${EXECUTABLE_NAME} ${FILES} ${FLAGS} ${RAYLIB_FLAGS} -D NINE_CIRCLE_DEBUG
+	@${CC} -o ${EXECUTABLE_NAME} ${FILES} ${FLAGS} ${RAYLIB_FLAGS} -D NINE_CIRCLE_DEBUG -fsanitize=address
 	@mv ${EXECUTABLE_NAME} ./bin
 
 wasm: ${FILES}
