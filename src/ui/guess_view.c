@@ -18,9 +18,9 @@ void GuessResultView_SetThumbnail(GuessResultView* view) {
     view->thumbnail = GetLevelThumbnail(view->level->id);
 }
 
-void GuessResultView_Initialise(GuessResultView* view, Level level, GuessResult result) {
-    view->level = &level;
-    view->result = &result;
+void GuessResultView_Initialise(GuessResultView* view, Level* level, GuessResult* result) {
+    view->level = level;
+    view->result = result;
     GuessResultView_SetThumbnail(view);
 }
 
@@ -74,18 +74,31 @@ void RenderColourGuesses(GuessResult* result) {
 }
 
 void RenderLevelInformation(GuessResultView* view) {
-    Texture thumbnail = GetLevelThumbnail(view->level->id);
-
     CLAY_AUTO_ID({
         .layout = {
-            .layoutDirection = CLAY_TOP_TO_BOTTOM
+            .layoutDirection = CLAY_TOP_TO_BOTTOM,
+            .childAlignment = CLAY_ALIGN_Y_TOP | CLAY_ALIGN_X_CENTER
         }
     }) {
         CLAY_AUTO_ID({
+            .layout = {
+                .sizing = {
+                    .width = CLAY_SIZING_FIXED(100),
+                    .height = CLAY_SIZING_FIXED(100)
+                }
+            },
+            .aspectRatio = 1,
             .image = {
                 .imageData = &view->thumbnail
             }
-        }) {}
+        }) {
+        }
+        CLAY_TEXT(view->level->name, {
+            .textColor = {255, 255, 255, 255},
+            .fontId = 0,
+            .fontSize = 16,
+            .wrapMode = CLAY_TEXT_WRAP_NONE
+        });
     }
 }
 

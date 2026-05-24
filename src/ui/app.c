@@ -23,7 +23,7 @@ typedef struct NineCircleAppImages {
 typedef struct NineCircleAppData {
     Font* fonts;
     Clay_Arena arena;
-    GuessArray guesses;
+    GuessArray* guesses;
 
     NineCircleAppImages images;
 } NineCircleAppData;
@@ -112,28 +112,18 @@ Clay_RenderCommandArray NineCircleApp_GetRenderCommands(NineCircleAppData* data,
                     },
                     .childAlignment = {
                         .x = CLAY_ALIGN_X_CENTER,
-                        .y = CLAY_ALIGN_Y_CENTER
+                        .y = CLAY_ALIGN_Y_TOP
                     },
                     .layoutDirection = CLAY_TOP_TO_BOTTOM,
                     .childGap = 8
+                },
+                .clip = {
+                    .vertical = true,
+                    .childOffset = Clay_GetScrollOffset()
                 }
             }) {
-                Level nineCirclesLevel = {
-                    .id = 4284013, 
-                    .name = CLAY_STRING("Nine Circles"),
-                };
-                GuessResult testResult = {
-                    .difficulty = RELATIVE_HIGHER,
-                    .downloads = RELATIVE_LOWER,
-                    .length = RELATIVE_CORRECT,
-                    .likes = RELATIVE_HIGHER,
-                    .objectCount = RELATIVE_CORRECT,
-                    .primaryColourCorrect = true,
-                    .secondaryColourCorrect = true
-                };
-
-                for (int i = 0; i < data->guesses.count; i++) {
-                    RenderGuessResult(&data->guesses.elements[i]);
+                for (int i = 0; i < data->guesses->count; i++) {
+                    RenderGuessResult(&data->guesses->elements[i]);
                 }
             }
     }}

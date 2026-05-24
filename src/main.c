@@ -53,13 +53,13 @@ int main(void) {
     };
 
     GuessResultView testView = {0};
-    GuessResultView_Initialise(&testView, nineCirclesLevel, testResult);
+    GuessResultView_Initialise(&testView, &nineCirclesLevel, &testResult);
 
     GuessArray testArray = {0};
     GuessArray_Initialise(&testArray, 16);
     GuessArray_Append(&testArray, testView);
-    GuessArray_Append(&testArray, testView);
-    GuessArray_Append(&testArray, testView);
+
+    appData.guesses = &testArray;
 
 #ifdef NINE_CIRCLE_DEBUG
     bool debugViewEnabled = true;
@@ -88,6 +88,11 @@ int main(void) {
                 debugViewEnabled = !debugViewEnabled;
             }
             Clay_SetDebugModeEnabled(debugViewEnabled);
+
+            if (IsKeyPressed(KEY_SPACE)) {
+                GuessArray_Append(&testArray, testView);
+                printf("Appended new entry to test array.\n");
+            }
 #endif
         
         Clay_RenderCommandArray renderCommands = NineCircleApp_GetRenderCommands(&appData, 0);
@@ -98,6 +103,7 @@ int main(void) {
         EndDrawing();
     }
 
+    GuessArray_Free(&testArray);
     Clay_Raylib_Close();
     return 0;
 }
