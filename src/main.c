@@ -36,7 +36,7 @@ int main(void) {
     NineCircleAppData_Initialise(&appData, fonts, arena);
 
 #ifdef NINE_CIRCLE_DEBUG
-    Clay_SetDebugModeEnabled(true);
+    bool debugViewEnabled = true;
 #endif
 
     while (!WindowShouldClose()) {
@@ -57,6 +57,12 @@ int main(void) {
             }, 
             0
         );
+#ifdef NINE_CIRCLE_DEBUG
+            if (IsKeyPressed(KEY_D)) {
+                debugViewEnabled = !debugViewEnabled;
+            }
+            Clay_SetDebugModeEnabled(debugViewEnabled);
+#endif
         
         Clay_RenderCommandArray renderCommands = NineCircleApp_GetRenderCommands(&appData);
 
