@@ -56,6 +56,7 @@ typedef enum Rating {
 typedef struct Level {
     // API Information
 
+    uint32_t id;
     Clay_String name;
     Clay_String description;
     Difficulty difficulty;
